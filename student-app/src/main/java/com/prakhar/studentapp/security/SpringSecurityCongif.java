@@ -34,12 +34,14 @@ public class SpringSecurityCongif {
                 .authorizeHttpRequests((authz) -> {
                     authz.requestMatchers("/","/login").permitAll();
                     authz.requestMatchers("/home/**").authenticated();
+                    authz.requestMatchers("/newuser").permitAll();
+                    authz.requestMatchers("/user/{username}").permitAll();
                         })
                 .csrf(csrf -> csrf.disable())
-                .formLogin().loginPage("/login")
-                .defaultSuccessUrl("/home")
-                .usernameParameter("username")
-                .passwordParameter("password");
+                .formLogin(form -> form.loginPage("/login")
+                        .defaultSuccessUrl("/home")
+                        .usernameParameter("username")
+                        .passwordParameter("password"));
         http.httpBasic(Customizer.withDefaults());
 
         return http.build();
