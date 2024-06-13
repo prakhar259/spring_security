@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Table(name = "roles")
 @Entity
 @AllArgsConstructor
@@ -13,11 +15,10 @@ import lombok.NoArgsConstructor;
 public class Roles {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
     private String role;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<User> user;
 }

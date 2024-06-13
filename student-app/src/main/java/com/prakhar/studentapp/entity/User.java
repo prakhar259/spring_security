@@ -5,24 +5,26 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
-@Table(name = "user")
+@Table(name = "users")
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @GeneratedValue
+    @Column(name = "user_id")
+    private Long id;
     private String firstName;
     private String lastName;
     private String email;
     private String userName;
     private String password;
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "user",cascade = CascadeType.PERSIST,fetch = FetchType.LAZY)
     private Set<Roles> roles;
 
 }

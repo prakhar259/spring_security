@@ -1,5 +1,6 @@
 package com.prakhar.studentapp.controller;
 
+import com.prakhar.studentapp.entity.Roles;
 import com.prakhar.studentapp.entity.User;
 import com.prakhar.studentapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,11 @@ public class StudentController {
         return "User created !";
     }
 
+//    @PostMapping("/newroles")
+//    public String newRole(@RequestBody Roles roles){
+//
+//    }
+
     @GetMapping("/user/{username}")
     public ResponseEntity<User> getUser(@PathVariable String username){
         User user = userService.getUserByUsername(username);
@@ -40,8 +46,5 @@ public class StudentController {
     public String removeUser(@PathVariable Long id){
         userService.removeUser(id);
         return "User Deleted Successfully";
-
     }
-
-
 }
