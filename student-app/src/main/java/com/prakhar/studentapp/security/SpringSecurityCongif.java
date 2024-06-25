@@ -9,11 +9,13 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.PasswordManagementDsl;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +25,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SpringSecurityCongif {
 
     @Autowired
@@ -35,13 +38,18 @@ public class SpringSecurityCongif {
                     authz.requestMatchers("/","/login").permitAll();
                     authz.requestMatchers("/home/**").authenticated();
                     authz.requestMatchers("/newuser").permitAll();
-                    authz.requestMatchers("/user/{username}").permitAll();
+                    authz.requestMatchers("/user/**").permitAll();
+                    authz.requestMatchers("/manage-student").permitAll();
+                    authz.requestMatchers("/access-denied").permitAll();
+//                    authz.requestMatchers("/manage-student").hasAuthority("PROFESSOR");
                         })
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(form -> form.loginPage("/login")
                         .defaultSuccessUrl("/home")
                         .usernameParameter("username")
-                        .passwordParameter("password"));
+                        .passwordParameter("password"))
+                .exceptionHandling(e -> e.accessDeniedPage("/access-denied"))
+                .logout((logout) -> logout.logoutUrl("/logout").logoutSuccessUrl("/login"));
         http.httpBasic(Customizer.withDefaults());
 
         return http.build();
