@@ -1,24 +1,25 @@
 package com.prakhar.studentapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.util.List;
+import java.util.Set;
 
 @Table(name = "roles")
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class Roles {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String role;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<User> user;
+    @ManyToMany(mappedBy = "roles")
+    @JsonIgnore
+    private Set<User> user;
 }
